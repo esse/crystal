@@ -513,8 +513,8 @@ describe Iterator do
     end
   end
 
-  describe "with object" do
-    it "does with object" do
+  describe "with_object" do
+    it "does with_object" do
       iter = (1..3).each.with_object("a")
       iter.next.should eq({1, "a"})
       iter.next.should eq({2, "a"})
@@ -523,6 +523,14 @@ describe Iterator do
 
       iter.rewind
       iter.next.should eq({1, "a"})
+    end
+
+    it "does with_object with block" do
+      output = [] of Int32
+      (1..5).each.with_object(output) do |value, object|
+        object << value if value % 2 == 0
+      end
+      output.should eq([2, 4])
     end
   end
 
@@ -547,11 +555,11 @@ describe Iterator do
   describe "integration" do
     it "combines many iterators" do
       (1..100).each
-        .select { |x| 50 <= x < 60 }
-        .map { |x| x * 2 }
-        .first(3)
-        .to_a
-        .should eq([100, 102, 104])
+              .select { |x| 50 <= x < 60 }
+              .map { |x| x * 2 }
+              .first(3)
+              .to_a
+              .should eq([100, 102, 104])
     end
   end
 
